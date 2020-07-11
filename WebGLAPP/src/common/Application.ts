@@ -144,6 +144,10 @@ export class Application implements EventListenerObject
         // 这样子类可以分别从该HTMLCanvasElement中获取Canvas2D或WebGL上下文对象
         this.canvas = canvas;
 
+        // 第二个参数类型  EventListener | EventListenerObject
+        // 前者回调函数 格式 (evt: Event): void;
+        // 后者一个对象继承EventListenerObject  拥有handleEvent(evt: Event): void;
+        //
         // canvas元素能够监听鼠标事件
         this.canvas.addEventListener( "mousedown", this, false );
         this.canvas.addEventListener( "mouseup", this, false );
@@ -164,6 +168,20 @@ export class Application implements EventListenerObject
         this.frameCallback = null;
 
         document.oncontextmenu = function () { return false; } // 禁止右键上下文菜单
+    }
+
+    public destroy() {
+        this.stop();
+        this.canvas.removeEventListener( "mousedown", this, false );
+        this.canvas.removeEventListener( "mouseup", this, false );
+        this.canvas.removeEventListener( "mousemove", this, false );
+
+        window.removeEventListener( "keydown", this, false );
+        window.removeEventListener( "keyup", this, false );
+        window.removeEventListener( "keypress", this, false );
+
+        this.frameCallback = null;
+        this.timers = [];
     }
 
     // 判断当前Application是否一直在调用requestAnimationFrame
