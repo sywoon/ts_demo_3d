@@ -5,6 +5,6 @@
 
 #folders
 node_modules
-
-
+.cache
+dist
 
